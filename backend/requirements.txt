@@ -1,0 +1,28 @@
+# Core dependencies
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-dotenv==1.0.0
+
+# Numerical computing
+numpy==1.24.3
+scipy==1.11.4
+
+# Optimization
+scipy-optimize-lbfgs==0.1.1
+
+# Async and concurrency
+aiofiles==23.2.1
+
+# WebSocket
+python-socketio==5.9.0
+python-engineio==4.7.1
+python-multipart==0.0.6
+
+# Data validation
+pydantic==2.4.2
+
+# Logging
+loguru==0.7.2
+
+# Performance monitoring
+psutil==5.9.6
