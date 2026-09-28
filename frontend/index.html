@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EGO-Planner 2D 演示系统</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>EGO-Planner <span>2D</span></h1>
+      <p>ESDF-free Gradient-based Local Planner 可视化演示</p>
+    </div>
+    <div class="connection"><i id="statusDot"></i><span id="statusText">未连接</span></div>
+  </header>
+
+  <main class="layout">
+    <section class="card map-card">
+      <div class="card-title"><h2>局部占有栅格与规划轨迹</h2><div class="legend"><b class="legend-obstacle"></b>障碍物 <b class="legend-search"></b>搜索路径 <b class="legend-traj"></b>轨迹</div></div>
+      <div class="canvas-wrap"><canvas id="mapCanvas" width="800" height="800"></canvas></div>
+      <p class="hint">点击地图设置起点/目标；按住鼠标拖动可绘制障碍物。当前算法不生成 ESDF。</p>
+    </section>
+
+    <aside class="side-panel">
+      <section class="card">
+        <h2>流程控制</h2>
+        <div class="mode-row"><button class="mode active" data-mode="start">设置起点</button><button class="mode" data-mode="goal">设置目标</button><button class="mode" data-mode="obstacle">绘制障碍</button></div>
+        <div class="points"><div>起点：<strong id="startValue">未设置</strong></div><div>目标：<strong id="goalValue">未设置</strong></div></div>
+        <div class="actions"><button id="searchBtn">① A* 搜索</button><button id="initBtn">② 初始化轨迹</button><button id="optimizeBtn" class="primary">③ 弹性优化</button></div>
+        <button id="runAllBtn" class="full primary">执行完整流程</button><button id="resetBtn" class="full danger">重置规划</button>
+      </section>
+
+      <section class="card">
+        <h2>算法状态</h2>
+        <dl class="metrics"><dt>地图栅格</dt><dd>100 × 100</dd><dt>占用单元</dt><dd id="occupiedValue">0</dd><dt>搜索节点</dt><dd id="expandedValue">—</dd><dt>搜索耗时</dt><dd id="searchTime">—</dd><dt>优化耗时</dt><dd id="optimizationTime">—</dd><dt>总耗时</dt><dd id="totalTime">—</dd></dl>
+        <div id="message" class="message">请选择起点和目标点。</div>
+      </section>
+
+      <section class="card parameters"><h2>演示参数</h2><label>安全距离 <output id="safetyOut">0.5 m</output><input id="safetyInput" type="range" min="0.1" max="1.5" step="0.1" value="0.5" disabled /></label><label>最大速度 <output>3.0 m/s</output><input type="range" min="1" max="5" step="0.5" value="3" disabled /></label><label>最大加速度 <output>2.0 m/s²</output><input type="range" min="0.5" max="5" step="0.5" value="2" disabled /></label><small>参数接口将在优化器参数化完成后开放。</small></section>
+    </aside>
+  </main>
+
+  <section class="lower-grid"><section class="card chart-card"><h2>优化代价曲线</h2><canvas id="costChart"></canvas></section><section class="card chart-card"><h2>动力学指标</h2><canvas id="dynamicsChart"></canvas></section><section class="card explain"><h2>当前方法</h2><p><b>ESDF-free：</b>仅保存局部占有栅格。轨迹采样点接近障碍物时，临时搜索局部占用单元并计算避障代价，不预建距离场。</p><code>f_obs(d) = ½(d - r)², d &lt; r；否则为 0</code></section></section>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
